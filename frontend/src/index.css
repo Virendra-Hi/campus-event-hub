@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+.animate-toast-in {
+  animation: toast-in 0.25s ease-out;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-paper text-ink font-body antialiased;
+  }
+  h1, h2, h3, h4 {
+    @apply font-display text-ink-900;
+  }
+  :focus-visible {
+    outline: 2px solid #EFA435;
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-primary {
+    @apply btn bg-ink text-paper hover:bg-ink-700;
+  }
+  .btn-accent {
+    @apply btn bg-amber text-ink-900 hover:bg-amber-600;
+  }
+  .btn-outline {
+    @apply btn border border-ink-200 text-ink bg-white hover:border-ink-400;
+  }
+  .btn-danger {
+    @apply btn bg-brick text-white hover:bg-brick-600;
+  }
+  .btn-ghost {
+    @apply btn text-ink hover:bg-ink-50;
+  }
+  .card {
+    @apply bg-white rounded-card shadow-card;
+  }
+  .input {
+    @apply w-full rounded-lg border border-ink-100 bg-white px-3.5 py-2.5 text-[15px] text-ink placeholder:text-ink-400/70 transition-colors focus:border-ink-400 focus:outline-none focus:ring-2 focus:ring-amber-300;
+  }
+  .label {
+    @apply mb-1.5 block text-sm font-medium text-ink-600;
+  }
+  .field-error {
+    @apply mt-1 text-[13px] text-brick-600;
+  }
+}

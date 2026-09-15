@@ -1,0 +1,16 @@
+import React from 'react'
+
+export default function EmptyState({ icon: Icon, title, description, action }) {
+  return (
+    <div className="flex flex-col items-center justify-center rounded-card border border-dashed border-ink-100 bg-white/60 px-6 py-16 text-center">
+      {Icon && (
+        <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-ink-50 text-ink-400">
+          <Icon size={22} />
+        </div>
+      )}
+      <h3 className="text-lg font-semibold text-ink">{title}</h3>
+      {description && <p className="mt-1.5 max-w-sm text-sm text-ink-400">{description}</p>}
+      {action && <div className="mt-5">{action}</div>}
+    </div>
+  )
+}
