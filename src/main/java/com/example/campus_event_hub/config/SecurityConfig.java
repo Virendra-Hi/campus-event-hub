@@ -46,8 +46,12 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(auth -> auth
 
+                        .requestMatchers("/error").permitAll()
                         // Login public
-                        .requestMatchers("/api/auth/login").permitAll()
+                        .requestMatchers(
+                                HttpMethod.POST,
+                                "/api/auth/login"
+                        ).permitAll()
 
                         .requestMatchers("/api/admin/signup").permitAll()
 
