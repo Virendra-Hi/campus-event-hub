@@ -50,6 +50,11 @@ public class SecurityConfig {
                         .requestMatchers("/api/admin/signup").permitAll()
 
 
+                        .requestMatchers(
+                                HttpMethod.GET,
+                                "/api/colleges"
+                        ).permitAll()
+
                         // Student → My Registrations
                         .requestMatchers(
                                 HttpMethod.GET,

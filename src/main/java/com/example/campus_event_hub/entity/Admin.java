@@ -27,8 +27,6 @@ public class Admin {
     @Column(nullable = false)
     private String role = "ADMIN";
 
-    public Admin() {
-    }
 
     public Admin(Long id, String name, String email,
                  String password, String role) {
