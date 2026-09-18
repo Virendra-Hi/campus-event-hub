@@ -8,6 +8,9 @@ import jakarta.validation.constraints.NotBlank;
 @Table(name = "admins")
 public class Admin {
 
+    public Admin() {
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

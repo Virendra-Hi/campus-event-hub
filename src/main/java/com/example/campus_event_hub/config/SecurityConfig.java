@@ -7,18 +7,14 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.config.Customizer;
 
 @Configuration
 public class SecurityConfig {
@@ -35,8 +31,8 @@ public class SecurityConfig {
 
         http
                 .cors(Customizer.withDefaults())
-                .csrf(csrf -> csrf.disable())
 
+                .csrf(csrf -> csrf.disable())
 
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(
@@ -46,26 +42,28 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(auth -> auth
 
+                        // Login
                         .requestMatchers("/api/auth/**").permitAll()
+
+                        // Error
                         .requestMatchers("/error").permitAll()
-                        // Login public
 
-
+                        // Admin Signup
                         .requestMatchers("/api/admin/signup").permitAll()
 
-
+                        // Colleges
                         .requestMatchers(
                                 HttpMethod.GET,
                                 "/api/colleges"
                         ).permitAll()
 
-                        // Student → My Registrations
+                        // Student registrations
                         .requestMatchers(
                                 HttpMethod.GET,
                                 "/api/events/registrations/by-email"
                         ).permitAll()
 
-                        // Registration data → ADMIN
+                        // Admin registration access
                         .requestMatchers(
                                 HttpMethod.GET,
                                 "/api/events/registrations"
@@ -81,10 +79,13 @@ public class SecurityConfig {
                                 "/api/events/registration/*"
                         ).hasRole("ADMIN")
 
-                        .requestMatchers(HttpMethod.DELETE, "/api/events/registration/student/*")
-                        .permitAll()
+                        // Student cancellation
+                        .requestMatchers(
+                                HttpMethod.DELETE,
+                                "/api/events/registration/student/*"
+                        ).permitAll()
 
-                        // Event dekhna public
+                        // Public events
                         .requestMatchers(
                                 HttpMethod.GET,
                                 "/api/events"
@@ -95,13 +96,13 @@ public class SecurityConfig {
                                 "/api/events/*"
                         ).permitAll()
 
-                        // Student registration public
+                        // Student registration
                         .requestMatchers(
                                 HttpMethod.POST,
                                 "/api/events/*/register"
                         ).permitAll()
 
-                        // Event management → ADMIN
+                        // Admin event management
                         .requestMatchers(
                                 HttpMethod.POST,
                                 "/api/events"
@@ -117,6 +118,7 @@ public class SecurityConfig {
                                 "/api/events/*"
                         ).hasRole("ADMIN")
 
+                        // Everything else requires login
                         .anyRequest().authenticated()
                 )
 
@@ -127,7 +129,6 @@ public class SecurityConfig {
 
         return http.build();
     }
-
 
     @Bean
     public AuthenticationManager authenticationManager(
