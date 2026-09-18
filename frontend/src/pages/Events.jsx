@@ -12,7 +12,7 @@ const FILTERS = [
 ]
 
 export default function Events() {
-    const [college, setCollege] = useState('GITS')
+
   const [events, setEvents] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
