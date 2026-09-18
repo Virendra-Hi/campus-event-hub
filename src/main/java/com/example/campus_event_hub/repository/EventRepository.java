@@ -8,5 +8,6 @@ import java.util.Optional;
 
 public interface EventRepository extends JpaRepository<Event, Long> {
     List<Event> findByCollegeId(Long collegeId);
+    List<Event> findByCollegeCode(String code);
     Optional<Event> findByIdAndCollegeId(Long id, Long collegeId);
 }

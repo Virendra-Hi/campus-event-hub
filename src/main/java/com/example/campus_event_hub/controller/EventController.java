@@ -28,8 +28,10 @@ public class EventController {
     }
 
     @GetMapping
-    public List<Event> getAllEvents() {
-        return eventService.getAllEvents();
+    public List<Event> getAllEvents(
+            @RequestParam(required = false) String college) {
+
+        return eventService.getAllEvents(college);
     }
     @GetMapping("/{id}")
     public Event getEventById(@PathVariable Long id) {

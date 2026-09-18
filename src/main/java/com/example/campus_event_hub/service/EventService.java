@@ -66,31 +66,15 @@ public class EventService {
         return eventRepository.save(event);
     }
 
-    public List<Event> getAllEvents() {
+    public List<Event> getAllEvents(String college) {
 
-        Authentication authentication =
-                SecurityContextHolder
-                        .getContext()
-                        .getAuthentication();
-
-        // Admin logged in
-        if (authentication != null
-                && authentication.isAuthenticated()
-                && !authentication.getName().equals("anonymousUser")) {
-
-            Admin admin = adminRepository
-                    .findByEmail(authentication.getName())
-                    .orElseThrow(() ->
-                            new RuntimeException("Admin not found"));
-
-            // Admin ko sirf apne college ke events
-            return eventRepository.findByCollegeId(
-                    admin.getCollege().getId()
-            );
+        // College select nahi kiya → saare events
+        if (college == null || college.isBlank()) {
+            return eventRepository.findAll();
         }
 
-        // Student / public user
-        return eventRepository.findAll();
+        // College code ke according events
+        return eventRepository.findByCollegeCode(college);
     }
 
     public Event getEventById(Long id) {
