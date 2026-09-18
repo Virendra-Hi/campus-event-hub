@@ -4,7 +4,7 @@ import eventService from '../services/eventService.js'
 import { getFriendlyErrorMessage } from '../services/api.js'
 import EventGrid from '../components/EventGrid.jsx'
 import { isUpcoming } from '../utils/format.js'
-
+import { COLLEGES } from '../config/colleges.js'
 const FILTERS = [
   { id: 'all', label: 'All events' },
   { id: 'upcoming', label: 'Upcoming' },
@@ -12,21 +12,23 @@ const FILTERS = [
 ]
 
 export default function Events() {
+    const [college, setCollege] = useState('GITS')
   const [events, setEvents] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [query, setQuery] = useState('')
   const [filter, setFilter] = useState('all')
+  const [college, setCollege] = useState('GITS')
 
   useEffect(() => {
     load()
-  }, [])
+  }, [college])
 
   async function load() {
     setLoading(true)
     setError('')
     try {
-      const data = await eventService.getAll()
+      const data = await eventService.getAll(college)
       setEvents(Array.isArray(data) ? data : [])
     } catch (err) {
       setError(getFriendlyErrorMessage(err, 'Could not load events.'))
@@ -67,6 +69,18 @@ export default function Events() {
             className="input pl-10"
             aria-label="Search events"
           />
+          <select
+            value={college}
+            onChange={(e) => setCollege(e.target.value)}
+            className="input w-full sm:w-auto"
+            aria-label="Select college"
+          >
+            {COLLEGES.map((item) => (
+              <option key={item.code} value={item.code}>
+                {item.name}
+              </option>
+            ))}
+          </select>
         </div>
 
         <div className="flex items-center gap-1.5 overflow-x-auto">

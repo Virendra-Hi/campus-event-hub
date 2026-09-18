@@ -12,9 +12,11 @@ import ErrorMessage from '../../components/ErrorMessage.jsx'
 import EmptyState from '../../components/EmptyState.jsx'
 import SeatIndicator from '../../components/SeatIndicator.jsx'
 import { formatEventDate } from '../../utils/format.js'
+import { useAuth } from '../../context/AuthContext.jsx'
 
 export default function AdminEvents() {
   const toast = useToast()
+  const { collegeCode } = useAuth()
   const [events, setEvents] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -26,15 +28,17 @@ export default function AdminEvents() {
   const [pendingDelete, setPendingDelete] = useState(null)
   const [deleting, setDeleting] = useState(false)
 
-  useEffect(() => {
-    load()
-  }, [])
+ useEffect(() => {
+   if (collegeCode) {
+     load()
+   }
+ }, [collegeCode])
 
   async function load() {
     setLoading(true)
     setError('')
     try {
-      const data = await eventService.getAll()
+      const data = await eventService.getAll(collegeCode)
       setEvents(Array.isArray(data) ? data : [])
     } catch (err) {
       setError(getFriendlyErrorMessage(err, 'Could not load events.'))
